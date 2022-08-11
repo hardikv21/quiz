@@ -2,7 +2,8 @@ const express = require('express'),
 app           = express(),
 bodyParser    = require('body-parser'),
 MongoClient   = require('mongodb').MongoClient,
-mongoURL      = 'mongodb+srv://hardik:hardik21@atlascluster.p8emwjg.mongodb.net/?retryWrites=true&w=majority';
+mongoURL      = 'mongodb+srv://hardik:hardik21@atlascluster.p8emwjg.mongodb.net/?retryWrites=true&w=majority',
+PORT          = process.env.PORT || 4200;
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -85,4 +86,4 @@ MongoClient.connect(mongoURL)
 
 app.get('/', (req, res) => res.render('index'));
 
-app.listen(process.env.PORT || 4200, () => console.log('Listening on 4200:'));
+app.listen(PORT, () => console.log(`Listening on ${PORT}:`));
