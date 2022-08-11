@@ -1,0 +1,18 @@
+.question-card {
+    width: 18rem;
+    border: none;
+    margin-left: 2%;
+}
+
+.submit-button {
+    margin: 2%;
+}
+
+.result-card {
+    border: none;
+    margin-left: 2%;
+}
+
+.home-button {
+    margin-top: 1%;
+}
