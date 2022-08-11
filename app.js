@@ -85,4 +85,4 @@ MongoClient.connect(mongoURL)
 
 app.get('/', (req, res) => res.render('index'));
 
-app.listen(4200, () => console.log('Listening on 4200:'));
+app.listen(process.env.PORT || 4200, () => console.log('Listening on 4200:'));
