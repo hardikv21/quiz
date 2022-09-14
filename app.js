@@ -20,7 +20,7 @@ const session = {
     saveUninitialized: false
 };
   
-if (app.get("env") === "production") {
+if (process.env.NODE_ENV === "production") {
     session.cookie.secure = true;
 }
 
