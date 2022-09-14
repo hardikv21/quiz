@@ -1,14 +1,9 @@
-const middleware = {};
-
-middleware.isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated())
-    {
+const isLoggedIn = (req, res, next) => {
+    if (req.user) {
         return next();
     }
-    else
-    {
-        res.redirect('/user/login');
-    }
+    req.session.returnTo = req.originalUrl;
+    res.redirect("/login");
 };
 
-module.exports = middleware;
+module.exports = isLoggedIn;
