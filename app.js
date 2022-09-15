@@ -20,9 +20,9 @@ const session = {
     saveUninitialized: false
 };
   
-if (process.env.NODE_ENV === "production") {
-    session.cookie.secure = true;
-}
+// if (process.env.NODE_ENV === "production") {
+//     session.cookie.secure = true;
+// }
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
