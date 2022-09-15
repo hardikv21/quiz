@@ -25,7 +25,7 @@
     text-align: center;
     margin: auto;
     margin-top: 5%;
-    width: 20%;
+    width: fit-content;
 }
 
 .home-button {
