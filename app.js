@@ -5,10 +5,13 @@ passport       = require("passport"),
 Auth0Strategy  = require("passport-auth0")
 bodyParser     = require('body-parser'),
 MongoClient    = require('mongodb').MongoClient,
+mongoose       = require("mongoose"),
 PORT           = process.env.PORT || 4200,
 authRouter     = require("./routes"),
 middleware     = require("./middleware"),
-connectFlash   = require("connect-flash");
+connectFlash   = require("connect-flash"),
+QuizUser       = require("./models/quizUser"),
+loggedUser    = {};
 
 require("dotenv").config();
 
@@ -22,6 +25,7 @@ const session = {
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(connectFlash());
 
 app.use(expressSession(session));
@@ -50,10 +54,42 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
+mongoose.connect(process.env.MongoURL, {useNewUrlParser: true})
+
+mongoose.connection.on("error", (error) => {
+    console.log(error)
+});
+
+mongoose.connection.on("open", () => {
+    console.log("Connected to MongoDB database.")
+});
+
+const saveUser = (user, req) => {
+    user.save()
+        .then((result) => loggedUser = result)
+        .catch((error) => req.flash("error", error.message));
+}
+
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.isAuthenticated();
     if (req.user) {
-        res.locals.currentUser = req.user["_json"]["email"];
+        const email = req.user["_json"]["email"];
+        res.locals.currentUser = {email};
+        
+        QuizUser.findOne({email}).exec(function(err, foundUser)
+        {
+            if(err)
+            {
+                req.flash("error", error.message);
+            }
+            else if (!foundUser)
+            {
+                saveUser(new QuizUser({email}), req);  
+            }
+            else {
+                loggedUser = foundUser;
+            }
+        });
     }
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
@@ -101,15 +137,21 @@ MongoClient.connect(process.env.MongoURL)
         app.post(
             "/sum-quiz",
             middleware,
-            (req, res) => (
+            (req, res) => {
+                score = calculateScore(req.body);
+                if (loggedUser) {
+                    loggedUser.sumQuiz = score;
+                    saveUser(loggedUser, req);
+                }
                 res.render(
                     "result",
                     {
                         quizType: "Sum",
-                        quizScore: calculateScore(req.body)
+                        quizScore: score,
+                        user: loggedUser
                     }
-                )
-            )
+                );
+            }
         );
 
         app.get(
@@ -134,17 +176,23 @@ MongoClient.connect(process.env.MongoURL)
             "/minus-quiz",
             middleware,
             (req, res) => {
+                const score = calculateScore(req.body);
+                if (loggedUser) {
+                    loggedUser.minusQuiz = score;
+                    saveUser(loggedUser, req);
+                }
                 res.render(
                     "result",
                     {
                         quizType: "Minus",
-                        quizScore: calculateScore(req.body)
+                        quizScore: score,
+                        user: loggedUser
                     }
-                )
+                );
             }
         );
     })
-    .catch((error) => req.flash("error", error.message));
+    .catch((error) => console.log(error.message));
 
 app.get("/", (req, res) => res.render("index"));
 
