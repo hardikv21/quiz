@@ -11,6 +11,7 @@ router.get(
         scope: "openid email profile"
     }),
     (req, res) => {
+        req.flash("success", "Successfully login!!");
         res.redirect("/");
     }
 );
@@ -20,6 +21,7 @@ router.get(
     (req, res, next) => {
     passport.authenticate("auth0", (err, user, info) => {
         if (err) {
+            req.flash("error", err.message);
             return next(err);
         }
         if (!user) {
@@ -27,10 +29,12 @@ router.get(
         }
         req.logIn(user, (err) => {
             if (err) {
+                req.flash("error", err.message);
                 return next(err);
             }
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
+            req.flash("success", "Successfully login!!");
             res.redirect(returnTo || "/");
         });
     })(req, res, next);
@@ -38,7 +42,8 @@ router.get(
 
 router.get("/logout", (req, res) => {
     req.logout(function(err) {
-        if (err) { 
+        if (err) {
+            req.flash("error", err.message);
             return next(err);
         }
         let returnTo = req.protocol + "://" + req.hostname;
@@ -57,7 +62,8 @@ router.get("/logout", (req, res) => {
             returnTo: returnTo
         });
         logoutURL.search = searchString;
-    
+        
+        req.flash("success", "Successfully logout!!");
         res.redirect(logoutURL);
       });
 });

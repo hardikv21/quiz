@@ -1,15 +1,14 @@
 const express  = require("express"),
 app            = express(),
-path           = require("path"),
 expressSession = require("express-session"),
 passport       = require("passport"),
 Auth0Strategy  = require("passport-auth0")
 bodyParser     = require('body-parser'),
 MongoClient    = require('mongodb').MongoClient,
-mongoURL       = "mongodb+srv://hardik:hardik21@atlascluster.p8emwjg.mongodb.net/?retryWrites=true&w=majority",
 PORT           = process.env.PORT || 4200,
 authRouter     = require("./routes"),
-middleware     = require("./middleware");
+middleware     = require("./middleware"),
+connectFlash   = require("connect-flash");
 
 require("dotenv").config();
 
@@ -23,6 +22,7 @@ const session = {
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(connectFlash());
 
 app.use(expressSession(session));
 
@@ -55,6 +55,8 @@ app.use((req, res, next) => {
     if (req.user) {
         res.locals.currentUser = req.user["_json"]["email"];
     }
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
 
@@ -74,7 +76,7 @@ const calculateScore = (response) => {
     return quizScore;
 }
 
-MongoClient.connect(mongoURL)
+MongoClient.connect(process.env.MongoURL)
     .then((response) => {
         const quizDB = response.db("quiz");
         
@@ -92,7 +94,7 @@ MongoClient.connect(mongoURL)
                             }
                         )
                     )
-                    .catch((error) => console.log(error));
+                    .catch((error) => req.flash("error", error.message));
             }
         );
 
@@ -124,7 +126,7 @@ MongoClient.connect(mongoURL)
                             }
                         )
                     )
-                    .catch((error) => console.log(error));
+                    .catch((error) => req.flash("error", error.message));
             }
         );
 
@@ -142,7 +144,7 @@ MongoClient.connect(mongoURL)
             }
         );
     })
-    .catch((error) => console.log(error));
+    .catch((error) => req.flash("error", error.message));
 
 app.get("/", (req, res) => res.render("index"));
 

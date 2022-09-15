@@ -1,18 +1,18 @@
 <%- include ("./partials/header") %>
 
-    <div class="card result-card">
-        <div class="card-body">
-            <div>
-                You scored
-                <b><%= quizScore %>%</b> in the
-                <b><%= quizType %>-quiz</b>!!
-            </div>
-            <div class="home-button">
-                <a href="/" class="card-link">
-                    <button type="submit" class="btn btn-warning">Home</button>
-                </a>
-            </div>
+<div class="card result-card">
+    <div class="card-body">
+        <div>
+            You scored
+            <b><%= quizScore %>%</b> in the
+            <b><%= quizType %>-quiz</b>!!
+        </div>
+        <div class="home-button">
+            <a href="/" class="card-link">
+                <button type="submit" class="btn btn-outline-warning">Home</button>
+            </a>
         </div>
     </div>
+</div>
 
 <%- include ("./partials/footer") %>

@@ -1,18 +1,33 @@
+.alert-container {
+    margin-top: 2%;
+}
+
+.quiz-choice-box {
+    margin-top: 2%;
+}
+
+.quiz_card {
+    text-align: center;
+    width:70%;
+    margin: auto;
+}
+
 .question-card {
-    width: 18rem;
-    border: none;
-    margin-left: 2%;
+    margin: 1%;
+    text-align: center;
 }
 
 .submit-button {
-    margin: 2%;
+    text-align: center;
 }
 
 .result-card {
-    border: none;
-    margin-left: 2%;
+    text-align: center;
+    margin: auto;
+    margin-top: 5%;
+    width: 20%;
 }
 
 .home-button {
-    margin-top: 1%;
+    margin-top: 2%;
 }
