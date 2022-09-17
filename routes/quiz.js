@@ -1,9 +1,9 @@
-const express = require("express"),
-router        = express.Router(),
-middleware    = require("../middleware"),
-QuizQuestion  = require("../models/quizQuestion"),
-QuizUser      = require("../models/quizUser"),
-QuizScore     = require("../models/quizScore");
+const express     = require("express"),
+router            = express.Router(),
+middleware        = require("../middleware"),
+QuizQuestion      = require("../models/quizQuestion"),
+QuizUser          = require("../models/quizUser"),
+QuizScore         = require("../models/quizScore");
 
 router.get(
     "/history",

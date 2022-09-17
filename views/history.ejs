@@ -1,27 +1,47 @@
 <%- include ("./partials/header") %>
 
-<div class="card result-card">
-    <div class="card-body">
-        <div>
-            <ul>
-                SumQuiz
-                    <% for(let i = 0; i < user.sumQuiz.length; i++) 
+<div class="container history">
+    <h2>History of the latest 5 quizes</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SumQuiz</th>
+                <th scope="col">SumQuiz - Time</th>
+                <th scope="col">MinusQuiz</th>
+                <th scope="col">MinusQuiz - Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < 5; i++)
+            { %>
+                <tr>
+                    <th scope="row"><%= i + 1 %></th>
+                    <% if (user.sumQuiz[i]) 
                     { %>
-                        <li><%= user.sumQuiz[i].score %> - <%= user.sumQuiz[i].date %></li>
-                    <% } %>
-                MinusQuiz
-                    <% for(let i = 0; i < user.minusQuiz.length; i++) 
+                        <td><%= user.sumQuiz[i].score %>%</td>
+                        <td><%= user.sumQuiz[i].date.toLocaleString() %></td>
+                    <% }
+                    else 
                     { %>
-                        <li><%= user.minusQuiz[i].score %> - <%= user.minusQuiz[i].date %></li>
+                        <td>-</td>
+                        <td>-</td>
                     <% } %>
-            </ul>
-        </div>
-        <div class="home-button">
-            <a href="/" class="card-link">
-                <button type="submit" class="btn btn-outline-warning">Home</button>
-            </a>
-        </div>
-    </div>
+                    <% if (user.minusQuiz[i]) 
+                    { %>
+                        <td><%= user.minusQuiz[i].score %>%</td>
+                        <td><%= user.minusQuiz[i].date.toLocaleString() %></td>
+                    <% }
+                    else 
+                    { %>
+                        <td>-</td>
+                        <td>-</td>
+                    <% } %>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
 </div>
 
 <%- include ("./partials/footer") %>
