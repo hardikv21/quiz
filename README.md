@@ -1,4 +1,4 @@
-# quiz
+# Quiz
 
 ## Technologies used:
 * NodeJs
@@ -8,3 +8,6 @@
 * FontAwesome
 * MongoDB Atlas Database
 * Heroku
+
+## Website link:
+* http://quiz-math-node.herokuapp.com/
